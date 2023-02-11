@@ -1,6 +1,6 @@
 # HOTEL-API
 
-- This API is a basic CRUD operational API, it has API's for:
+- ## This API is a basic CRUD operational API, it has API's for:
   - Creating Rooms
   - Editing Rooms
   - Deleting Rooms
@@ -10,7 +10,7 @@
 
 ## API features:
 
-- Validations:
+- ## Validations:
   - Proper schema indexing for improved search feature
   - Ensures that no two rooms has the same codename.
   - Makes sure that the room type falls withing the specified scope
