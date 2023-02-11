@@ -24,4 +24,4 @@ npm install
 npm run dev // To start developement mode
 ```
 
-### Hope you enjoyed. Thank you
+### Hope you enjoyed. Thank you 👋👋
