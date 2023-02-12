@@ -5,7 +5,8 @@ const DATABASE = {
 }
 
 const SCHEMAS = {
-    ROOM_SCHEMA: 'room'
+    ROOM_SCHEMA: 'room',
+    Room_Type: "roomtype"
 }
 
 module.exports = { DATABASE, SCHEMAS }

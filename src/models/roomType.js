@@ -3,15 +3,16 @@ const { SCHEMAS } = require("../utils/constants");
 
 const roomSchema = new Schema(
   {
-    roomType: {
+    // _id: {type: Schema.Types.ObjectId},
+    name: {
       type: String,
       required: true,
-      enum: ['Premium', "Standard", "Economic"]
-    }
+      // enum: ["Premium", "Standard", "Economic"],
+    },
   },
   { timestamps: true }
 );
 
-roomSchema.index({ "$**": "text" }, { default_language: "english"})
+roomSchema.index({ "$**": "text" }, { default_language: "english" });
 
-module.exports = model(SCHEMAS.ROOM_SCHEMA, roomSchema);
+module.exports = model(SCHEMAS.Room_Type, roomSchema);

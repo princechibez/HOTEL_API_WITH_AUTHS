@@ -13,7 +13,7 @@ app.use(express.json());
 app.get("/", (req, res) => res.send("Welcome to this HOTEL API..."));
 
 // room routes
-app.use("/room", roomRoutes);
+app.use("/api/v1", roomRoutes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

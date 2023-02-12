@@ -1,13 +1,13 @@
 const Rooms = require("../models/room");
 
-exports.getFilteredRooms = async (req, res, next) => {
-  const roomSearchQuery = req.params.searchQuery;
+exports.getFilteredRooms = async (queries) => {
+  const { search, roomType, minPrice, maxPrice } = queries;
 
   try {
     /**
      * Check if the search query isn't properly constructed
      */
-    if (!roomSearchQuery || roomSearchQuery === "") {
+    if (!queries === {}) {
       throw new Error(
         "No search queries provided. Try searching for rooms by name, price and type"
       );
@@ -17,22 +17,21 @@ exports.getFilteredRooms = async (req, res, next) => {
     // regex = regex.replace('tagQuery', roomSearchQuery);
     // regex = new RegExp(regex);
     // console.log(typeof regex, regex)
-    const matchedRooms = await Rooms.find({
-      $or: [
-        { codeName: { $regex: roomSearchQuery, $options: "i" } },
-        { price: { $regex: roomSearchQuery, $options: "i" } },
-        { roomType: { $regex: roomSearchQuery, $options: "i" } },
-      ],
-    })
+    const matchedRooms = await Rooms.find(
+      {
+        $and: [
+          { name: { $regex: search, $options: "i" } },
+          { price: { "$gte": minPrice, "$lte": maxPrice } }
+        ],
+      },
+      undefined,
+      { populate: { path: "roomType", options: { strict: false } } }
+    )
       .limit(10)
       .lean();
 
-    matchedRooms.length === 0
-      ? res.status(404).json({
-          message: "No results found...",
-        })
-      : res.status(200).json({ data: matchedRooms });
+      return { data: matchedRooms };
   } catch (err) {
-    next(err);
+    throw err
   }
 };

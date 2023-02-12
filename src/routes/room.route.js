@@ -4,22 +4,25 @@ const router = express.Router();
 const RoomControllers = require('../controllers/room.controller')
 const SearchControllers = require('../controllers/search.controller')
 
+// route for getting all room types from the database
+router.get('/room-types', RoomControllers.getRoomTypes)
+
+// route for creating room types
+router.post('/room-types', RoomControllers.postRoomTypes)
+
 // route for adding a room to the database
-router.post('/addRoom', RoomControllers.AddRoom)
-
-// route for editing a room in the database
-router.put('/editRoom/:roomId', RoomControllers.EditRoom)
-
-// route for deleting a room from the database
-router.delete('/deleteRoom/:roomId', RoomControllers.DeleteRoom)
-
-// route for fetching a room from the database
-router.get('/getRoom/:roomId', RoomControllers.GetOneRoom)
+router.post('/rooms', RoomControllers.AddRoom)
 
 // route for fetching all rooms from the database
-router.get('/getAllRooms', RoomControllers.GetAllRooms)
+router.get('/rooms', RoomControllers.GetAllRooms)
 
-// route for searching/filtering rooms in the database
-router.get('/filter/:searchQuery', SearchControllers.getFilteredRooms)
+// route for editing a room in the database
+router.patch('/rooms/:roomId', RoomControllers.EditRoom)
+
+// route for deleting a room from the database
+router.delete('/rooms/:roomId', RoomControllers.DeleteRoom)
+
+// route for fetching a sinhgle room from the database
+router.get('/rooms/:roomId', RoomControllers.GetOneRoom)
 
 module.exports = router;

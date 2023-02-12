@@ -1,6 +1,28 @@
 const Room = require("../models/room");
+const RoomTypes = require("../models/roomType");
 
 class ROOM_MANAGER {
+  // get all room types
+  async allRoomTypes() {
+    try {
+      return await RoomTypes.find().lean();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  // create a room type
+  async createRoomType(roomTypeData) {
+    try {
+      const newRoomType = new RoomTypes({
+        ...roomTypeData,
+      });
+      return newRoomType.save();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   // methode for creating room
   async createRoom(roomData) {
     try {
@@ -9,10 +31,11 @@ class ROOM_MANAGER {
       });
       return await newRoom.save();
     } catch (err) {
-      if (err.message.indexOf("duplicate key error") !== -1) {
-        err.message =
-          "A room already has this codename, choose another codename";
-      }
+      // if (err.message.indexOf("duplicate key error") !== -1) {
+      //   err.message =
+      //     "A room already has this codename, choose another codename";
+      //   err.statusCode = 400;
+      // }
       throw err;
     }
   }
@@ -25,6 +48,7 @@ class ROOM_MANAGER {
       if (err.message.indexOf("duplicate key error") !== -1) {
         err.message =
           "A room already has this codename, choose another codename";
+        err.statusCode = 400;
       }
       throw err;
     }
@@ -49,13 +73,17 @@ class ROOM_MANAGER {
   }
 
   // Method for fetching all rooms
-  async getAllRooms() {
-    try {
-      return await Room.find().lean();
-    } catch (err) {
-      throw err;
-    }
-  }
+  // async getAllRooms() {
+  //   try {
+  //     return await Room.find({}, undefined, {
+  //       populate: { path: "roomType", options: { strictPopulate: false } },
+  //     })
+  //       // .populate("roomtype", {options: {strictPopulate: false}})
+  //       .lean();
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // }
 }
 
 module.exports = new ROOM_MANAGER();

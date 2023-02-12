@@ -1,27 +1,41 @@
 const RoomHelpers = require("../utils/room.handlers");
+const searcher = require("./search.controller");
+
+exports.getRoomTypes = async (req, res, next) => {
+  try {
+    const allRoomTypes = await RoomHelpers.allRoomTypes();
+    res.status(200).json({
+      data: allRoomTypes,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postRoomTypes = async (req, res, next) => {
+  const { name } = req.body;
+  try {
+    const newRoomtype = await RoomHelpers.createRoomType({ name });
+    res.status(200).json({
+      message: "Room type created successfully.",
+      data: newRoomtype,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 exports.AddRoom = async (req, res, next) => {
-  const { codeName, price, roomType } = req.body;
+  const { name, price, roomType } = req.body;
+
   try {
     // Check to see if the body's contents are not empty
-    if (codeName === "" || price === "" || roomType === "") {
-      throw new Error("codeName, price or roomType must not be empty!");
+    if (name === "" || price === "") {
+      throw new Error("name and price must not be empty!");
     }
 
-    // Validating the roomType query...
-    if (
-      !(
-        roomType === "Premium" ||
-        roomType === "Standard" ||
-        roomType === "Economic"
-      )
-    ) {
-      throw new Error(
-        "room type must either be `Premium, Standard or Economic!`."
-      );
-    }
     const newRoom = await RoomHelpers.createRoom({
-      codeName,
+      name,
       price,
       roomType,
     });
@@ -30,44 +44,26 @@ exports.AddRoom = async (req, res, next) => {
         .status(200)
         .json({ message: "Room successfully created.", data: newRoom._doc });
   } catch (err) {
-    err.statusCode = 400
+    err.statusCode = 401;
     next(err);
   }
 };
 
 exports.EditRoom = async (req, res, next) => {
   const { roomId } = req.params;
-  const { codeName, price, roomType } = req.body;
+  const { name, price, roomType } = req.body;
   try {
     if (!roomId || roomId === "") {
       throw new Error("parameter `roomId` is required!");
     }
-    if (
-      !(codeName && price && roomType) ||
-      codeName === "" ||
-      price === "" ||
-      roomType === ""
-    ) {
-      throw new Error("codeName, price or roomType must not be empty!");
-    }
-
-    // Validating the roomType query...
-    if (
-      !(
-        roomType === "Premium" ||
-        roomType === "Standard" ||
-        roomType === "Economic"
-      )
-    ) {
-      throw new Error(
-        "room type must either be `Premium, Standard or Economic!`."
-      );
+    if (!(name && price && roomType) || name === "" || price === "") {
+      throw new Error("name and price must not be empty!");
     }
 
     const editedRoom = await RoomHelpers.editRoom(roomId, {
-      codeName,
+      name,
       price,
-      roomType
+      roomType,
     });
     editedRoom &&
       res
@@ -105,9 +101,11 @@ exports.GetOneRoom = async (req, res, next) => {
   }
 };
 
-exports.GetAllRooms = async (req, res) => {
+exports.GetAllRooms = async (req, res, next) => {
+  
   try {
-    const rooms = await RoomHelpers.getAllRooms();
+    const rooms = await searcher.getFilteredRooms(req.query)
+    // const rooms = await RoomHelpers.getAllRooms();
     rooms && res.status(200).json({ data: rooms });
   } catch (err) {
     next(err);
