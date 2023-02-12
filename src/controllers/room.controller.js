@@ -30,6 +30,7 @@ exports.AddRoom = async (req, res, next) => {
         .status(200)
         .json({ message: "Room successfully created.", data: newRoom._doc });
   } catch (err) {
+    err.statusCode = 400
     next(err);
   }
 };

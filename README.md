@@ -1,4 +1,4 @@
-# HOTEL-API
+# HOTEL-API --->>> To be updated to latest version soon...
 
 - ## This API is a basic CRUD operational API, it has API's for:
   - Creating Rooms
