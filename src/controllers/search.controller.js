@@ -19,7 +19,7 @@ exports.getFilteredRooms = async (queries) => {
     // console.log(typeof regex, regex)
     const matchedRooms = await Rooms.find(
       {
-        $and: [
+        $or: [
           { name: { $regex: search, $options: "i" } },
           { price: { "$gte": minPrice, "$lte": maxPrice } }
         ],
