@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./src/utils/database");
 const roomRoutes = require("./src/routes/room.route");
+const authRoutes = require("./src/routes/auth")
 require("dotenv/config");
 
 const app = express();
@@ -14,6 +15,9 @@ app.get("/", (req, res) => res.send("Welcome to this HOTEL API..."));
 
 // room routes
 app.use("/api/v1", roomRoutes);
+
+// authentication routes
+app.use("/api/v1", authRoutes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

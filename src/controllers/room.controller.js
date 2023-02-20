@@ -102,7 +102,6 @@ exports.GetOneRoom = async (req, res, next) => {
 };
 
 exports.GetAllRooms = async (req, res, next) => {
-  
   try {
     const rooms = await searcher.getFilteredRooms(req.query)
     // const rooms = await RoomHelpers.getAllRooms();

@@ -7,6 +7,12 @@ exports.getFilteredRooms = async (queries) => {
     /**
      * Check if the search query isn't properly constructed
      */
+    if (search === undefined) {
+      throw new Error(
+        "No search queries provided"
+      );
+    }
+
     if (!queries === {}) {
       throw new Error(
         "No search queries provided. Try searching for rooms by name, price and type"
