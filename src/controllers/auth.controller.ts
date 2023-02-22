@@ -1,20 +1,25 @@
-const { validationResult } = require("express-validator");
-const User = require("../models/user.model");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import { NextFunction, Request, Response } from "express";
+
+import { validationResult } from "express-validator";
+import User from "../models/user.model";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+
+import { IErrorObj } from "../interfaces/error.interface";
 require("dotenv").config();
 
-const SALT_ROUNDS = +process.env.SALT_ROUNDS;
+const SALT_ROUNDS = +process.env.SALT_ROUNDS!;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 class Auth_Controller {
-  async signup(req, res, next) {
+  async signup(req: Request, res: Response, next: NextFunction) {
     const { username, password, email, role } = req.body;
 
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        let error = new Error(errors.array()[0].msg);
+        let error: IErrorObj = new Error(errors.array()[0].msg);
         error.statusCode = 400;
         throw error;
       }
@@ -39,12 +44,12 @@ class Auth_Controller {
     }
   }
 
-  async login(req, res, next) {
+  async login(req: Request, res: Response, next: NextFunction) {
     const { password, email } = req.body;
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        let error = new Error(errors.array()[0].msg);
+        let error: IErrorObj = new Error(errors.array()[0].msg);
         error.statusCode = 400;
         throw error;
       }
@@ -56,7 +61,7 @@ class Auth_Controller {
           .json({ message: "User not found", success: false });
       const token = jwt.sign(
         { userId: user._id, role: user.role },
-        JWT_SECRET,
+        JWT_SECRET!,
         { expiresIn: "24h" }
       );
 
@@ -73,4 +78,4 @@ class Auth_Controller {
   }
 }
 
-module.exports = new Auth_Controller();
+export default new Auth_Controller();

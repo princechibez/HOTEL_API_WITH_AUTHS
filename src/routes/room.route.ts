@@ -1,15 +1,16 @@
-const express = require('express');
+import express from "express";
 const router = express.Router();
 
-const isAuthenticated = require("../middlewares/authenticator")
-const isAuthorized = require("../middlewares/authorizer")
-const RoomControllers = require('../controllers/room.controller');
+import isAuthenticated from "../middlewares/authenticator";
+import isAuthorized from "../middlewares/authorizer";
+import RoomControllers from "../controllers/room.controller";
+import RoomTypeControllers from "../controllers/roomtype.controller";
 
 // route for getting all room types from the database
-router.get('/room-types', RoomControllers.getRoomTypes)
+router.get('/room-types', RoomTypeControllers.getRoomTypes)
 
 // route for creating room types
-router.post('/room-types', isAuthenticated, isAuthorized, RoomControllers.postRoomTypes)
+router.post('/room-types', isAuthenticated, isAuthorized, RoomTypeControllers.postRoomTypes)
 
 // route for adding a room to the database
 router.post('/rooms', isAuthenticated, isAuthorized, RoomControllers.AddRoom)
@@ -26,4 +27,4 @@ router.delete('/rooms/:roomId', isAuthenticated, isAuthorized, RoomControllers.D
 // route for fetching a sinhgle room from the database
 router.get('/rooms/:roomId', RoomControllers.GetOneRoom)
 
-module.exports = router;
+export default router;

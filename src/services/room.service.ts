@@ -1,30 +1,11 @@
-const Room = require("../models/room");
-const RoomTypes = require("../models/roomType");
+import Room from "../models/room";
+import RoomTypes from "../models/roomType";
+import { IRoom } from "../interfaces/room.interface";
 
 class ROOM_MANAGER {
-  // get all room types
-  async allRoomTypes() {
-    try {
-      return await RoomTypes.find().lean();
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  // create a room type
-  async createRoomType(roomTypeData) {
-    try {
-      const newRoomType = new RoomTypes({
-        ...roomTypeData,
-      });
-      return newRoomType.save();
-    } catch (err) {
-      throw err;
-    }
-  }
 
   // methode for creating room
-  async createRoom(roomData) {
+  async createRoom(roomData: IRoom) {
     try {
       const newRoom = new Room({
         ...roomData,
@@ -41,10 +22,10 @@ class ROOM_MANAGER {
   }
 
   // Method for editing room
-  async editRoom(id, newData) {
+  async editRoom(id: string, newData: Partial<IRoom>) {
     try {
       return await Room.findOneAndUpdate({ _id: id }, newData, { new: true });
-    } catch (err) {
+    } catch (err: any) {
       if (err.message.indexOf("duplicate key error") !== -1) {
         err.message =
           "A room already has this codename, choose another codename";
@@ -55,7 +36,7 @@ class ROOM_MANAGER {
   }
 
   // Method for deleting room
-  async deleteRoom(id) {
+  async deleteRoom(id: string) {
     try {
       return await Room.findOneAndDelete({ _id: id });
     } catch (err) {
@@ -64,26 +45,13 @@ class ROOM_MANAGER {
   }
 
   // Method for fetching one room
-  async findRoom(id) {
+  async findRoom(id: string) {
     try {
       return await Room.findOne({ _id: id }).lean();
     } catch (err) {
       throw err;
     }
   }
-
-  // Method for fetching all rooms
-  // async getAllRooms() {
-  //   try {
-  //     return await Room.find({}, undefined, {
-  //       populate: { path: "roomType", options: { strictPopulate: false } },
-  //     })
-  //       // .populate("roomtype", {options: {strictPopulate: false}})
-  //       .lean();
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // }
 }
 
-module.exports = new ROOM_MANAGER();
+export default new ROOM_MANAGER();

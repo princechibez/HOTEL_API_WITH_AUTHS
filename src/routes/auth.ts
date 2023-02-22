@@ -1,10 +1,12 @@
-const express = require("express");
-const router = express.Router();
-const { body } = require("express-validator");
-const bcrypt = require("bcrypt");
+import express from "express";
+import { body } from "express-validator";
 
-const User = require("../models/user.model");
-const AuthController = require("../controllers/auth.controller");
+
+const router = express.Router();
+import bcrypt from "bcrypt"
+
+import User from "../models/user.model";
+import AuthController from "../controllers/auth.controller";
 
 // route for getting all room types from the database
 router.post(
@@ -13,7 +15,7 @@ router.post(
     body("username").not().isEmpty().withMessage("Username must not be empty"),
     body("email", "Invalid email provided")
       .isEmail()
-      .custom(async (value, { req }) => {
+      .custom(async (value: string, { req }) => {
         const existingEmail = await User.findOne({ email: value });
         if (existingEmail) {
           throw new Error("This email already exists, use another one.");
@@ -36,7 +38,7 @@ router.post(
   [
     body("email", "Invalid email provided")
       .isEmail()
-      .custom(async (value, { req }) => {
+      .custom(async (value) => {
         const existingEmail = await User.findOne({ email: value });
         if (!existingEmail) {
           throw new Error("Email address not found");
@@ -45,7 +47,7 @@ router.post(
       }),
     body("password").custom(async (value, { req }) => {
       const user = await User.findOne({ email: req.body.email });
-      const passwordMatch = await bcrypt.compare(value, user.password);
+      const passwordMatch = await bcrypt.compare(value, user?.password!);
       if (!passwordMatch) {
         throw Error("Incorrect Passoword");
       }
@@ -55,4 +57,4 @@ router.post(
   AuthController.login
 );
 
-module.exports = router;
+export default router;

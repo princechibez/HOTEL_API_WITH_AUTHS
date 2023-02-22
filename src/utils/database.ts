@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const { DATABASE } = require("./constants")
+import mongoose from "mongoose";
+import { DATABASE } from "./constants";
 
-const connectDB = cb => {
+const connectDB = (cb: () => void) => {
     console.log('connecting to DB...')
     mongoose.set('strictQuery', true);
     mongoose.connect(DATABASE.MONGO_URI)
@@ -13,4 +13,4 @@ const connectDB = cb => {
     })
 }
 
-module.exports = connectDB;
+export default connectDB;

@@ -1,7 +1,8 @@
-require('dotenv/config');
+import dotenv from "dotenv";
+dotenv.config()
 
 const DATABASE = {
-    MONGO_URI: process.env.MONGO_URI
+    MONGO_URI: process.env.MONGO_URI!
 }
 
 const SCHEMAS = {
@@ -10,4 +11,4 @@ const SCHEMAS = {
     USER_SCHEMA: "user",
 }
 
-module.exports = { DATABASE, SCHEMAS }
+export { DATABASE, SCHEMAS }

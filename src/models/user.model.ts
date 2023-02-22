@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const { SCHEMAS } = require("../utils/constants");
+import { Schema, model } from "mongoose";
+import { SCHEMAS } from "../utils/constants";
 
 const userSchema = new Schema(
   {
@@ -29,4 +29,4 @@ const userSchema = new Schema(
 
 userSchema.index({ "$**": "text" }, { default_language: "english" });
 
-module.exports = model(SCHEMAS.USER_SCHEMA, userSchema);
+export default model(SCHEMAS.USER_SCHEMA, userSchema);

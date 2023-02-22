@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const { SCHEMAS } = require("../utils/constants");
+import { Schema, model } from "mongoose";
+import { SCHEMAS } from "../utils/constants";
 
 const roomSchema = new Schema(
   {
@@ -15,4 +15,4 @@ const roomSchema = new Schema(
 
 roomSchema.index({ "$**": "text" }, { default_language: "english" });
 
-module.exports = model(SCHEMAS.Room_Type, roomSchema);
+export default model(SCHEMAS.Room_Type, roomSchema);
