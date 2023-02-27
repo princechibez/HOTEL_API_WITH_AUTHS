@@ -10,7 +10,7 @@ import { IErrorObj } from "../interfaces/error.interface";
 require("dotenv").config();
 
 const SALT_ROUNDS = +process.env.SALT_ROUNDS!;
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 class Auth_Controller {
   async signup(req: Request, res: Response, next: NextFunction) {
@@ -61,7 +61,7 @@ class Auth_Controller {
           .json({ message: "User not found", success: false });
       const token = jwt.sign(
         { userId: user._id, role: user.role },
-        JWT_SECRET!,
+        JWT_SECRET,
         { expiresIn: "24h" }
       );
 
